@@ -1,0 +1,37 @@
+# Vamos a añadir aquí los documenos que quiero que ignore 
+# Ignorar el entorno virtual de Poetry
+.venv/
+
+# Ignorar archivos de configuración y caché de VSCode
+.vscode/
+
+# Ignorar archivos generados por pytest
+.pytest_cache/
+*.cover
+coverage.xml
+nosetests.xml
+*.log
+
+# Ignorar archivos temporales de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar archivos de compilación
+*.egg-info/
+dist/
+build/
+
+# Ignorar archivos de dependencias de Poetry (si se usan)
+poetry.lock
+
+# Ignorar archivos de configuración de editor de texto
+*.swp
+
+# Ignorar archivos específicos de sistemas operativos (ej. macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos generados por herramientas de testing
+tox/
+nox/
