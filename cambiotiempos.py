@@ -1,16 +1,18 @@
 from datetime import datetime
+import pytz
 
-# Función para convertir UTC a segundos desde la época
 def tiempo(utc_time_str):
     # Convertimos el string UTC a un objeto datetime
     utc_time = datetime.strptime(utc_time_str, "%Y-%m-%d %H:%M:%S")
-
-    # Convertimos el objeto datetime en segundos desde la época
+    
+    # Asignamos la zona horaria UTC
+    utc_time = pytz.utc.localize(utc_time)
+    
+    # Convertimos a segundos desde la época (sin afectar la zona horaria)
     epoch_time = int(utc_time.timestamp())
-
+    
     return epoch_time
 
 utc_time_str = "2019-04-11 18:25:54"  
 epoch_seconds = tiempo(utc_time_str)
-
-print(f"El tiempo UTC '{utc_time_str}' es {epoch_seconds} segundos desde la época (epoch).")
+print(epoch_seconds)
