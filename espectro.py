@@ -3,8 +3,6 @@
 import os #leer variables entorno
 import numpy as np
 from dotenv import load_dotenv #credenciales de la API
-#from datetime import datetime
-#import requests #peticiones HTP a la api
 from espectroT8.desc import zint_to_float
 import requests
 from requests.auth import HTTPBasicAuth
@@ -31,7 +29,8 @@ T8_PASSWORD = os.getenv("T8_PASSWORD")
 min_freq=2.5 #valores concreto de la maquina
 max_freq=2000
 freq = np.linspace(min_freq, max_freq, len(espectro))
-plt.plot(freq, espectro)
+normalized_espectro = espectro / np.max(espectro)
+plt.plot(freq, normalized_espectro)
 plt.title('Espectro de la señal')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Espectro')
