@@ -9,8 +9,11 @@ from requests.auth import HTTPBasicAuth
 
 # Parámetros para la API
 url = "http://lzfs45.mirror.twave.io/lzfs45/rest/waves/LP_Turbine/MAD31CY005/AM1/1555007154"
-user = 'practicas'
-password = 'Practicas2025'
+
+# Cargar variables de entorno
+load_dotenv()
+user = os.getenv("T8_USER")
+password = os.getenv("T8_PASSWORD")
 
 factor = 0.034013085
 sample_rate = 5120  # Frecuencia de muestreo
