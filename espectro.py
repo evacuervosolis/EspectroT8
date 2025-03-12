@@ -11,18 +11,18 @@ import json
 
 # Parámetros para la API
 url = "http://lzfs45.mirror.twave.io/lzfs45/rest/spectra/LP_Turbine/MAD31CY005/AM1/1555007154"
-user = 'practicas'  # Usuario de autenticación
-password = 'Practicas2025'  # Contraseña de autenticación
+#user = 'practicas'  # Usuario de autenticación
+#password = 'Practicas2025'  # Contraseña de autenticación
+# Cargar variables de entorno
+load_dotenv()
+user = os.getenv("T8_USER")
+password = os.getenv("T8_PASSWORD")
+
+
 
 # Pedimos los datos
 response = requests.get(url, auth=HTTPBasicAuth(user, password))
 espectro = zint_to_float(response.json()["data"])# Esto debería ser una lista de valores numéricos
-
-
-# Cargar variables de entorno
-load_dotenv()
-T8_USER = os.getenv("T8_USER")
-T8_PASSWORD = os.getenv("T8_PASSWORD")
 
 
 #Gráfica del espectro
