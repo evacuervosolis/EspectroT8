@@ -2,6 +2,9 @@ import numpy as np
 from struct import unpack
 from base64 import b64decode
 from zlib import decompress
+from datetime import UTC, datetime
+
+
 
 def decode_and_convert_to_float(raw_data: str) -> np.ndarray:
     """
@@ -20,3 +23,11 @@ def decode_and_convert_to_float(raw_data: str) -> np.ndarray:
         dtype="f",
     )
     return float_array
+
+def url_generator(type, machine, point, pmode, year, month, day, hour, min, seg):
+    utc_time = datetime(year, month, day, hour, min, seg, tzinfo=UTC)
+    timestamp = int(utc_time.timestamp())
+
+    URL=f'https://lzfs45.mirror.twave.io/lzfs45/rest/{type}/{machine}/{point}/{pmode}/{timestamp}'
+
+    return URL
