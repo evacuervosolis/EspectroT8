@@ -8,7 +8,7 @@ from espectroT8.desc import decode_and_convert_to_float
 import matplotlib.pyplot as plt
 from espectroT8.espectro import get_spectrum_from_api
 from espectroT8.espectro import get_spectrum_from_waveform
-from desc import url_generator
+from espectroT8.desc import url_generator
 #-------------------------------------------------------------------------------------------------------------------------------------
 
 
