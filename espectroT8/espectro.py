@@ -1,5 +1,6 @@
 import numpy as np
 import requests
+from scipy.fft import fft, fftfreq
 
 from espectroT8.desc import (
     decode_and_convert_to_float,
@@ -17,21 +18,20 @@ def get_spectrum_from_api(url, user, password):
     Returns:
         tuple: Contiene las frecuencias y la magnitud del espectro original normalizada.
     """
-    response = requests.get(url, auth=(user, password), timeout=30)
+    response = requests.get(url, auth=(user, password),timeout=30)
     espectro = decode_and_convert_to_float(response.json()["data"])
 
     # Frecuencias obtenidas de la API
-    min_freq = 2.5
-    max_freq = 2000
+    min_freq = 2.5  
+    max_freq = 2000  
     freq = np.linspace(min_freq, max_freq, len(espectro))
+    factor = 0.00043146516
+    return freq, espectro*factor
 
-    return freq, espectro
 
-
-def get_spectrum_from_waveform(
-    url, user, password, factor=0.034013085, sample_rate=5120
-):
-    """Obtiene la señal de la API, aplica la ventana Hanning, hace zero-padding
+def get_spectrum_from_waveform(url, user, password, 
+                               factor=0.034013085, sample_rate=5120):
+    """Obtiene la señal de la API, aplica la ventana Hanning, hace zero-padding 
     y calcula el espectro usando la FFT.
 
     Args:
@@ -44,8 +44,7 @@ def get_spectrum_from_waveform(
     Returns:
         tuple: Contiene las frecuencias y la magnitud del espectro calculado.
     """
-
-    response = requests.get(url, auth=(user, password), timeout=30)
+    response = requests.get(url, auth=(user, password),timeout=30)
     waveform = decode_and_convert_to_float(response.json()["data"])
     adjusted_waveform = waveform * factor
 
@@ -55,17 +54,15 @@ def get_spectrum_from_waveform(
 
     # Zero-padding
     n = len(windowed_waveform)
-    n_zero_padded = n * 4
+    n_zero_padded = 2 ** np.ceil(np.log2(n)).astype(int)
     zero_padded_waveform = np.pad(windowed_waveform, (0, n_zero_padded - n), "constant")
 
     # Calcular la FFT
-    fft_signal = np.fft.fft(zero_padded_waveform)
-    fft_signal = np.fft.fftshift(fft_signal)
-    magnitude = np.abs(fft_signal)
+    fft_signal = fft(zero_padded_waveform)*2*np.sqrt(2)
+    magnitude = np.abs(fft_signal)/len(fft_signal)
 
     # Generar las frecuencias correspondientes
-    freqs = np.fft.fftfreq(n_zero_padded, 1 / sample_rate)
-    freqs = np.fft.fftshift(freqs)
+    freqs = fftfreq(len(waveform), 1 / sample_rate)
 
     positive_freqs = freqs[(freqs > 2.5) & (freqs < 2000)]
     positive_magnitude = magnitude[(freqs > 2.5) & (freqs < 2000)]
